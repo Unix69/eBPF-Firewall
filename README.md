@@ -203,8 +203,14 @@ firewall.stop()</code></pre>
 
 ## 📄 License & Resources
 
-* **Kernel Data Plane:** Distributed under the terms of the **GPL** License, which is mandatory to unlock core eBPF helper functions within the Linux kernel.
-* **Control Plane Wrapper:** Distributed under the terms of the permissive **MIT** License.
+* **⚙️ Kernel Data Plane:** Distributed under the terms of the **GPL** License, which is mandatory to unlock and execute core internal helper function symbols within the Linux kernel space engine footprint.
+* **🐍 Control Plane Wrapper:** Distributed under the terms of the permissive **BSD 2-Clause License** (Copyright (c) 2026, Unix69). You can review the official parameters inside the root repository tracking layout.
+  
+👉 **Read the full license agreement here:** [./LICENSE](./LICENSE)
+
+### 🌐 Upstream Community Portals
 * **🌐 eBPF Project Portal:** [ebpf.io](https://ebpf.io/)
 * **💻 BCC Repository:** [iovisor/bcc](https://github.com/iovisor/bcc)
 * **📚 XDP Reference Tutorial:** [XDP Project Guides](https://github.com/xdp-project/xdp-tutorial)
+
+---
