@@ -1,6 +1,6 @@
 # 🛡️ Automated High-Performance eBPF/XDP Network Firewall
 
-A production-grade, asynchronous, programmable network security engine leveraging **Extended Berkeley Packet Filter (eBPF)** and **Express Data Path (XDP)** inside the Linux kernel driver layer.
+A production-grade, asynchronous, programmable network security engine leveraging **Extended Berkeley Filter (eBPF)** and **Express Data Path (XDP)** inside the Linux kernel driver layer.
 
 ---
 
@@ -9,39 +9,78 @@ A production-grade, asynchronous, programmable network security engine leveragin
   <img src="https://img.shields.io/badge/Kernel-5.4+-blue.svg?style=flat-square&logo=linux" alt="Linux Kernel">
   <img src="https://img.shields.io/badge/Language-Python%20%2F%20C-orange.svg?style=flat-square" alt="Language">
   <img src="https://img.shields.io/badge/Framework-BCC-red.svg?style=flat-square" alt="Framework">
-  <img src="https://img.shields.io/badge/License-GPL%20%2F%20MIT-green.svg?style=flat-square" alt="License">
+  <img src="https://img.shields.io/badge/License-GPL%20%2F%20BSD--2-green.svg?style=flat-square" alt="License">
   <img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg?style=flat-square" alt="Build">
 </p>
 
 ---
 
 ## 📋 Table of Contents
-1. [✨ Core Features & Capabilities](#-core-features--capabilities)
-2. [🛠️ Technical Stack](#%EF%B8%8F-technical-stack)
-3. [📐 Architecture and Design Patterns](#-architecture-and-design-patterns)
-4. [🚀 Installation & Prerequisites](#-installation--prerequisites)
-5. [🚀 Real-World Use Cases & Blueprints](#-real-world-use-cases--blueprints)
-6. [⚙️ Configuration & Environment](#%EF%B8%8F-configuration--environment)
-7. [💻 Usage Guide & Integration API](#-usage-guide--integration-api)
-8. [🔌 Extensibility & Customization](#-extensibility--customization)
-9. [📄 License & Resources](#-license--resources)
+1. [📚 Documentation Index & Navigation](#-documentation-index--navigation)
+2. [✨ Core Features & Capabilities](#-core-features--capabilities)
+3. [🛠️ Technical Stack](#%EF%B8%8F-technical-stack)
+4. [📐 Architecture and Design Patterns](#-architecture-and-design-patterns)
+5. [🚀 Installation & Prerequisites](#-installation--prerequisites)
+6. [🚀 Real-World Use Cases & Blueprints](#-real-world-use-cases--blueprints)
+7. [⚙️ Configuration & Environment](#%EF%B8%8F-configuration--environment)
+8. [💻 Usage Guide & Integration API](#-usage-guide--integration-api)
+9. [🔌 Extensibility & Customization](#-extensibility--customization)
+10. [📄 License & Resources](#-license--resources)
+
+---
+
+## 📚 Documentation Index & Navigation
+
+To help you navigate the system design, architectural parameters, and open-source practices, our documentation framework is divided into specialized modules. Please refer to these specific files for deep technical investigations:
+
+<table>
+  <thead>
+    <tr>
+      <th>📄 Document Reference</th>
+      <th>🎯 Target Technical Scope</th>
+      <th>🛠️ Primary Audience</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="./eBPF.md">🔬 eBPF &amp; XDP Deep-Dive (eBPF.md)</a></td>
+      <td>Theoretical kernel-space layers, packet context execution loops, XDP verdict tracking, and high-speed atomic memory operations.</td>
+      <td>Network Engineers, Kernel Architects</td>
+    </tr>
+    <tr>
+      <td><a href="./INTEGRATION.md">🔌 Advanced Integration (INTEGRATION.md)</a></td>
+      <td>Finite State Machine lifecycle tokens, rule serialization matrices, cross-cluster state persistence, and automated self-healing.</td>
+      <td>Backend Developers, Devops &amp; SREs</td>
+    </tr>
+    <tr>
+      <td><a href="./USE_CASES.md">🚀 Production Recipes (USE_CASES.md)</a></td>
+      <td>Fully detailed, ready-to-run automation recipes including adaptive IDS logic, scheduling hooks, and web telemetry handlers.</td>
+      <td>Security Operators, Software Engineers</td>
+    </tr>
+    <tr>
+      <td><a href="./CONTRIBUTING.md">👩‍💻 Collaboration Guide (CONTRIBUTING.md)</a></td>
+      <td>Isolated development environment workflows, VM testing safety rules, custom git prefixes, and pull request steps.</td>
+      <td>Repository Contributors, Reviewers</td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
 ## ✨ Core Features & Capabilities
 
-* **⚡ Wire-Speed IP Blacklisting:** Inbound malicious IPv4 packets are evaluated and dropped before the kernel allocates complex socket buffer (`sk_buff`) data structures, neutralizing resource-exhaustion DDoS/DoS attacks.
+* **⚡ Wire-Speed IP Blacklisting:** Inbound malicious IPv4 packets are evaluated and dropped before the kernel allocates complex socket buffer (`sk_buff`) data structures, neutralizing resource-exhaustion DDoS/DoS attacks. For theoretical details, visit the [🔬 eBPF Subsystem Documentation](./eBPF.md).
 * **🔒 Layer-4 Transport Inspection:** Enforces deep frame introspection to drop unauthorized packets across both **TCP** and **UDP** destination ports.
 * **🎛️ Dynamic Default Policy:** Toggles the firewall fallback behavior (PASS or DROP) on-the-fly directly from the user-space controller.
 * **📈 Real-Time Telemetry Maps:** Collects global processing metrics (allowed vs. dropped packets) combined with dedicated per-IP hit counters.
-* **🩺 Autonomous Self-Healing:** A dedicated background daemon monitors system health, catches runtime faults or interface detachments, and initiates transparent state recovery workflows.
+* **🩺 Autonomous Self-Healing:** A dedicated background daemon monitors system health, catches runtime faults or interface detachments, and initiates transparent state recovery workflows. Review the full architecture inside the [🔌 Integration Guide](./INTEGRATION.md).
 
 ---
 
 ## 🛠️ Technical Stack
 
-* **Data Plane (Kernel Space):** Restricted C executed within a secure, JIT-compiled sandbox environment verified by the eBPF Kernel Verifier.
-* **Control Plane (User Space):** Object-Oriented Python 3.10+ implementing Finite State Machines, automated exception token handling, and binary network serialization.
+* **Data Plane (Kernel Space):** Restricted C executed within a secure, JIT-compiled sandbox environment verified by the eBPF Kernel Verifier. Check the source setup inside [xdp_firewall.c](./xdp_firewall.c).
+* **Control Plane (User Space):** Object-Oriented Python 3.10+ implementing Finite State Machines, automated exception token handling, and binary network serialization. Look up components inside [firewall.py](./firewall.py).
 * **Bindings Subsystem:** BCC (BPF Compiler Collection) API for live compilation, map descriptor polling, and kernel hook anchoring.
 
 ---
@@ -85,28 +124,21 @@ The C module extracts packet boundaries, validates Layer 2 Ethernet headers, par
 ### 2. 🐍 User Space Controller (`firewall.py`)
 Encapsulates runtime lifecycles inside an explicitly managed Finite State Machine supporting specific operational tokens (`INIT`, `STARTING`, `RUNNING`, `STOPPING`, `STOPPED`, `RESTARTING`, `FAILED`).
 * Utilizes network structural libraries (`socket`, `struct`) to reliably translate standard dot-decimal strings into Network Byte Order (Big Endian) 32-bit integers processed by eBPF maps.
-* Implements a comprehensive `RecoveryManager` linking custom exceptions (e.g., `FirewallThreadException`) to precise recovery actions (`FirewallThreadRecoveryAction`) to clear stale state objects and securely restart worker threads.
+* Implements a comprehensive `RecoveryManager` linking custom exceptions (e.g., `FirewallThreadException`) to precise recovery actions (`FirewallThreadRecoveryAction`) to clear stale state objects and securely restart worker threads. More layout patterns are detailed inside the [🔌 Integration Guide](./INTEGRATION.md).
 
 ---
 
 ## 🚀 Installation & Prerequisites
 
-Because eBPF interacts directly with kernel parameters, administrative privileges (`sudo`) and a modern Linux kernel engine (5.4+) are required.
+Because eBPF interacts directly with kernel parameters, administrative privileges (`sudo`) and a modern Linux kernel engine (5.4+) are required. For code safety prerequisites, ensure you check the [👩‍💻 Collaboration Guide](./CONTRIBUTING.md).
 
 ### 1. Install System Tools & Libraries (Ubuntu/Debian)
 <pre><code class="language-bash">sudo apt update
 sudo apt install -y bpfcc-tools libbpfcc-dev linux-headers-$(uname -r) llvm clang</code></pre>
 
 ### 2. Install Python Dependencies
-Deploy necessary user-space packages using pip:
+Deploy necessary user-space packages using pip tracking our `requirements.txt` file footprint:
 <pre><code class="language-bash">sudo pip3 install -r requirements.txt</code></pre>
-
-
-
-gration API"):
-
-Markdown
-
 
 ---
 
@@ -122,8 +154,14 @@ An asynchronous security worker that tails local authentication logs (e.g., `/va
 * **Implementation Blueprint:** See [Use Case 1 in USE_CASES.md](./USE_CASES.md#-use-case-1-automated-ssh-brute-force-mitigator).
 
 ### ⏰ 2. Time-Based Network Access Schedule
-A script designed to restrict or grant access to exposed infrastructure elements (such as maintenance or database ports) according to explicit
+A script designed to restrict or grant access to exposed infrastructure elements (such as maintenance or database ports) according to explicit office hour schedules.
+* **Core Concepts:** Scripted scheduling, automated block cycling, stateful cleanup.
+* **Implementation Blueprint:** See [Use Case 2 in USE_CASES.md](./USE_CASES.md#-use-case-2-time-based-network-access-schedule).
 
+### 📊 3. High-Traffic Web API Integration
+A telemetry module connecting directly to operational worker instances, collecting tracking logs, and reporting active memory statistics to analytics dashboards.
+* **Core Concepts:** Map pooling, JSON web payloads, real-time hotspot auditing.
+* **Implementation Blueprint:** See [Use Case 3 in USE_CASES.md](./USE_CASES.md#-use-case-3-integration-with-high-traffic-web-apis).
 
 ---
 
@@ -148,7 +186,7 @@ sudo -E python3 firewall.py</code></pre>
 
 ### Programmatic Integration API
 
-You can import and control the `Firewall` object within your own backend microservices, daemon setups, or custom management layers:
+You can import and control the `Firewall` object within your own backend microservices, daemon setups, or custom management layers. Advanced structural examples are provided in the [🔌 INTEGRATION.md](./INTEGRATION.md) layout.
 
 <pre><code class="language-python">from firewall import firewall, FirewallState
 import time
@@ -195,9 +233,9 @@ firewall.stop()</code></pre>
 
 ## 🔌 Extensibility & Customization
 
-* **🔔 Third-Party Alerting:** Connect notification methods directly into the initialization configurations (`on_block_ip`, `on_stats_read_fail`, etc.) to forward security events to messaging webhooks, persistent databases, or external log collectors.
-* **🌐 Network Range Masking (CIDR):** To expand from individual IP rules to complete subnets (e.g., `/24`), swap out the standard `BPF_HASH` definition for a `BPF_LPM_TRIE` structure inside `xdp_firewall.c`, and perform key matching with longest-prefix-match helpers.
-* **🔄 Redundant State Synchronization:** Utilize the built-in `snapshot()` and `restore(state_dict)` methods to export active parameters, serialize them over a secure network transport, and instantly replicate security rules across a cluster of servers.
+* **🔔 Third-Party Alerting:** Connect notification methods directly into the initialization configurations (`on_block_ip`, `on_stats_read_fail`, etc.) to forward security events to messaging webhooks, or external log collectors.
+* **🌐 Network Range Masking (CIDR):** Swap out the standard `BPF_HASH` definition for a `BPF_LPM_TRIE` structure inside `xdp_firewall.c`, and perform key matching with longest-prefix-match helpers to target complete subnets.
+* **🔄 Redundant State Synchronization:** Utilize the built-in `snapshot()` and `restore(state_dict)` methods to instantly replicate security rules across a cluster of servers. See explicit serialization details inside the [🔌 INTEGRATION.md](./INTEGRATION.md#%EF%B8%8F-state-persistence--cluster-synchronization) file.
 
 ---
 
